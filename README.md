@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # MiniProject_parkisons
 This project predicts whether a person has Parkinson’s disease based on biomedical voice measurements. The system uses machine learning algorithms trained on real-world datasets to identify key vocal features linked to Parkinson’s symptoms. It provides an easy-to-use Streamlit web app for users to input their data and get instant predictions.
 
@@ -60,3 +61,6 @@ Pooja — Bangalore Institute of Technology
 Mini Project: Parkinson’s Disease Prediction using Machine Learning
 
 
+=======
+# Parkisons_MiniProject
+>>>>>>> 3e8d06b6b56f47dd7d47dfc22be0ac860dbec7dd
