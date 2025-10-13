@@ -60,7 +60,3 @@ Parkinsons-Disease-Prediction/
 Pooja — Bangalore Institute of Technology
 Mini Project: Parkinson’s Disease Prediction using Machine Learning
 
-
-=======
-# Parkisons_MiniProject
->>>>>>> 3e8d06b6b56f47dd7d47dfc22be0ac860dbec7dd
