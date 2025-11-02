@@ -10,11 +10,14 @@ st.title("🧠 Parkinson’s Disease Prediction System")
 st.write("Enter the patient’s medical parameters below:")
 
 # Input fields
-fo = st.number_input("MDVP:Fo(Hz)", value=120.0)
-jitter = st.number_input("MDVP:Jitter(%)", value=0.005)
-shimmer = st.number_input("MDVP:Shimmer", value=0.02)
-nhr = st.number_input("NHR", value=0.03)
-hnr = st.number_input("HNR", value=20.0)
+fo = st.number_input("MDVP:Fo(Hz)", value=120.0, format="%.3f")
+jitter = st.number_input("MDVP:Jitter(%)", value=0.005, format="%.3f")
+shimmer = st.number_input("MDVP:Shimmer", value=0.020, format="%.3f")
+nhr = st.number_input("NHR", value=0.030, format="%.3f")
+hnr = st.number_input("HNR", value=20.000, format="%.3f")
+
+# 🔹 Step 2️⃣ Add model confidence + threshold control
+threshold = st.slider("Select confidence threshold", 0.0, 1.0, 0.6)
 
 if st.button("Predict"):
     try:
@@ -25,14 +28,16 @@ if st.button("Predict"):
         # Get probability of Parkinson’s
         probability = model.predict_proba(scaled_data)[0][1]
 
-        # Show probability
-        st.write(f"### 🧩 Model confidence: {probability * 100:.2f}%")
+        # Show confidence
+        st.subheader("Model Confidence & Prediction")
+        st.write(f"🎯 Model confidence: **{probability * 100:.2f}%**")
+        st.write(f"⚙️ Applied threshold: **{threshold:.2f}**")
 
-        # Use threshold for interpretation (tweakable)
-        if probability > 0.6:  # 60% confidence threshold
+        # Apply threshold dynamically
+        if probability > threshold:
             st.error("🚨 Patient **may have Parkinson’s disease.**")
         else:
             st.success("✅ Patient is **likely healthy.**")
-            
+
     except Exception as e:
         st.error(f"⚠️ Error during prediction: {e}")
