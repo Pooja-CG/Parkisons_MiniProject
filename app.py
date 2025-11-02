@@ -16,8 +16,8 @@ shimmer = st.number_input("MDVP:Shimmer", value=0.020, format="%.3f")
 nhr = st.number_input("NHR", value=0.030, format="%.3f")
 hnr = st.number_input("HNR", value=20.000, format="%.3f")
 
-# 🔹 Step 2️⃣ Add model confidence + threshold control
-threshold = st.slider("Select confidence threshold", 0.0, 1.0, 0.6)
+# 🔹 Add model confidence + threshold control
+threshold = st.slider("Select confidence threshold", 0.0, 1.0, 0.9)
 
 if st.button("Predict"):
     try:
