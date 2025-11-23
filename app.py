@@ -9,35 +9,65 @@ scaler = pickle.load(open('scaler.pkl', 'rb'))
 st.title("🧠 Parkinson’s Disease Prediction System")
 st.write("Enter the patient’s medical parameters below:")
 
-# Input fields
+# User Inputs (5 features)
 fo = st.number_input("MDVP:Fo(Hz)", value=120.0, format="%.3f")
 jitter = st.number_input("MDVP:Jitter(%)", value=0.005, format="%.3f")
 shimmer = st.number_input("MDVP:Shimmer", value=0.020, format="%.3f")
 nhr = st.number_input("NHR", value=0.030, format="%.3f")
 hnr = st.number_input("HNR", value=20.000, format="%.3f")
 
-# 🔹 Add model confidence + threshold control
-threshold = st.slider("Select confidence threshold", 0.0, 1.0, 0.9)
+# Confidence Threshold
+threshold = st.slider("Select confidence threshold", 0.0, 1.0, 0.60)
+
+# Default Average Values for Remaining 17 Features
+default_values = {
+    'MDVP:Fhi(Hz)': 197.084,
+    'MDVP:Flo(Hz)': 104.315,
+    'MDVP:Jitter(Abs)': 0.00004,
+    'MDVP:RAP': 0.003,
+    'MDVP:PPQ': 0.0035,
+    'Jitter:DDP': 0.009,
+    'MDVP:Shimmer(dB)': 0.300,
+    'Shimmer:APQ3': 0.015,
+    'Shimmer:APQ5': 0.020,
+    'MDVP:APQ': 0.025,
+    'Shimmer:DDA': 0.045,
+    'NHR_default': 0.030,
+    'HNR_default': 20.000,
+    'RPDE': 0.45,
+    'DFA': 0.72,
+    'spread1': -5.33,
+    'spread2': 0.25,
+    'D2': 2.30,
+    'PPE': 0.21
+}
 
 if st.button("Predict"):
     try:
-        # Prepare input data
-        input_data = np.array([[fo, jitter, shimmer, nhr, hnr]])
-        scaled_data = scaler.transform(input_data)
+        # Add user inputs
+        user_inputs = [fo, jitter, shimmer, nhr, hnr]
 
-        # Get probability of Parkinson’s
+        # Add default values for remaining 17 features
+        remaining_features = list(default_values.values())
+
+        # Combine all 22 features
+        final_features = np.array(user_inputs + remaining_features).reshape(1, -1)
+
+        # Scale
+        scaled_data = scaler.transform(final_features)
+
+        # Predict probability
         probability = model.predict_proba(scaled_data)[0][1]
 
-        # Show confidence
+        # Display results
         st.subheader("Model Confidence & Prediction")
         st.write(f"🎯 Model confidence: **{probability * 100:.2f}%**")
-        st.write(f"⚙️ Applied threshold: **{threshold:.2f}**")
+        st.write(f"⚙ Applied threshold: **{threshold}**")
 
-        # Apply threshold dynamically
         if probability > threshold:
             st.error("🚨 Patient **may have Parkinson’s disease.**")
         else:
             st.success("✅ Patient is **likely healthy.**")
 
     except Exception as e:
-        st.error(f"⚠️ Error during prediction: {e}")
+        st.error(f"⚠️ Error: {e}")
